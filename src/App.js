@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import './App.css';
+import TodoItem from './TodoItem'
 
 class App extends Component {
 
@@ -15,7 +16,9 @@ class App extends Component {
     // JSX
     return (
       <Fragment>
+        <label htmlFor='insertArea'>输入内容</label>
         <input 
+          id='insertArea'
           value={this.state.inputValue}
           onChange={this.handleInputChange.bind(this)}
         />
@@ -23,7 +26,8 @@ class App extends Component {
         <ul>
           {
             this.state.list.map((item, index) => {
-              return <li key={index} onClick={this.handleItemDelete.bind(this, index)}>{item}</li>
+              // return <li key={index} onClick={this.handleItemDelete.bind(this, index)}>{item}</li>
+              return <TodoItem content={item}/>
             })
           }
         </ul>
