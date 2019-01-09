@@ -10,6 +10,9 @@ class App extends Component {
       inputValue: '',
       list: []
     }
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleItemDelete = this.handleItemDelete.bind(this)
   }
 
   render() {
@@ -20,39 +23,62 @@ class App extends Component {
         <input 
           id='insertArea'
           value={this.state.inputValue}
-          onChange={this.handleInputChange.bind(this)}
+          onChange={this.handleInputChange}
         />
-        <button onClick={this.handleSubmit.bind(this)}>提交</button>
+        <button onClick={this.handleSubmit}>提交</button>
         <ul>
-          {
-            this.state.list.map((item, index) => {
-              // return <li key={index} onClick={this.handleItemDelete.bind(this, index)}>{item}</li>
-              return <TodoItem content={item}/>
-            })
-          }
+          {this.getTodoItem()}
         </ul>
       </Fragment>
     );
   }
 
+  getTodoItem() {
+    return (
+      this.state.list.map((item, index) => {
+        return (
+          <TodoItem 
+            key={index} 
+            content={item} 
+            index={index} 
+            handleItemDelete={this.handleItemDelete}
+          />
+        )
+      })
+    )
+  }
+
   handleInputChange(e) {
-    this.setState({
-      inputValue: e.target.value
-    })
+    // 同步setState
+    // this.setState({
+    //   inputValue: e.target.value
+    // })
+
+    // 新版回调异步setState有性能提升
+    // this.setState(() => {
+    //   return {
+    //     inputValue: e.target.value
+    //   }
+    // })
+
+    // es6简写
+    // 事件对象无法异步获取会被置为null
+    const value = e.target.value
+    this.setState(() => ({inputValue: value}))
   }
 
   handleSubmit() {
-    this.setState({
-      list: [...this.state.list, this.state.inputValue],
+    this.setState((prevState) => ({
+      list: [...prevState.list, prevState.inputValue],
       inputValue: ''
-    })
+    }))
   }
 
   handleItemDelete(index) {
-    const list = [...this.state.list]
-    list.splice(index, 1)
-    this.setState({
-      list: list
+    this.setState((prevState) => {
+      const list = [...prevState.list]
+      list.splice(index, 1)
+      return {list}
     })
   }
 }
