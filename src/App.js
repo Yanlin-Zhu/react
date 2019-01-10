@@ -21,6 +21,7 @@ class App extends Component {
       <Fragment>
         <label htmlFor='insertArea'>输入内容</label>
         <input 
+          ref={(input) => {this.input = input}}
           id='insertArea'
           value={this.state.inputValue}
           onChange={this.handleInputChange}
@@ -48,7 +49,8 @@ class App extends Component {
     )
   }
 
-  handleInputChange(e) {
+  // handleInputChange(e) {
+  handleInputChange() {
     // 同步setState
     // this.setState({
     //   inputValue: e.target.value
@@ -63,7 +65,8 @@ class App extends Component {
 
     // es6简写
     // 事件对象无法异步获取会被置为null
-    const value = e.target.value
+    // const value = e.target.value
+    const value = this.input.value
     this.setState(() => ({inputValue: value}))
   }
 
