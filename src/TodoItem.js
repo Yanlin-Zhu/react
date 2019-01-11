@@ -9,14 +9,13 @@ class TodoItem extends Component {
   }
 
   // 性能优化防止父组件render执行时子组件数据未发生变化也执行render函数，防止生成不必要的虚拟DOM做比对
-  // ???
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(11)
-    // if (nextProps.content !== this.props.content) {
-    //   return true
-    // } else {
+    console.log(nextProps.content, this.props.content)
+    if (nextProps.content !== this.props.content) {
+      return true
+    } else {
       return false
-    // }
+    }
   }
   componentWillMount() {
     console.log('componentWillMount')

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import './App.css';
 import TodoItem from './TodoItem'
+import axios from 'axios'
 
 class App extends Component {
 
@@ -16,7 +17,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // ajax请求一般放在这里
+    // ajax请求一般放在这里charles mock数据
+    axios.get('/todolist/get').then((res) => {
+      this.setState(() => ({list: [...res.data]}))
+    }).catch((error) => {
+      console.log(error)
+    })
   }
 
   render() {
@@ -82,6 +88,7 @@ class App extends Component {
   }
 
   handleItemDelete(index) {
+    console.log(index)
     this.setState((prevState) => {
       const list = [...prevState.list]
       list.splice(index, 1)
