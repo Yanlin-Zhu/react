@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import './App.css';
 import TodoItem from './TodoItem'
 import axios from 'axios'
+import { CSSTransition } from 'react-transition-group';
 
 class App extends Component {
 
@@ -9,7 +10,8 @@ class App extends Component {
     super(props);
     this.state = {
       inputValue: '',
-      list: []
+      list: [],
+      show: false
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -29,6 +31,12 @@ class App extends Component {
     // JSX
     return (
       <Fragment>
+        <CSSTransition
+          in={this.state.show}
+          timeout={1000}
+        >
+          <p>todolist</p>
+        </CSSTransition>
         <label htmlFor='insertArea'>输入内容</label>
         <input 
           ref={(input) => {this.input = input}}
