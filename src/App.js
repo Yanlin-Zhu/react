@@ -15,6 +15,10 @@ class App extends Component {
     this.handleItemDelete = this.handleItemDelete.bind(this)
   }
 
+  componentDidMount() {
+    // ajax请求一般放在这里
+  }
+
   render() {
     // JSX
     return (
