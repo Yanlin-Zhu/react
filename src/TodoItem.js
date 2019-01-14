@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types'
 
 class TodoItem extends Component {
@@ -27,9 +27,11 @@ class TodoItem extends Component {
     console.log(231)
     const { content } = this.props
     return (
-      <li onClick={this.handleClick}>
-        {content}
-      </li>
+      <Fragment>
+        <li onClick={this.handleClick}>
+          {content}
+        </li>
+      </Fragment>
     )
   }
 

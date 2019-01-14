@@ -3,6 +3,8 @@ import './App.css';
 import TodoItem from './TodoItem'
 import axios from 'axios'
 import { CSSTransition } from 'react-transition-group';
+import { TransitionGroup } from 'react-transition-group';
+import uuid from 'uuid';
 
 class App extends Component {
 
@@ -10,8 +12,7 @@ class App extends Component {
     super(props);
     this.state = {
       inputValue: '',
-      list: [],
-      show: false
+      list: []
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -31,12 +32,7 @@ class App extends Component {
     // JSX
     return (
       <Fragment>
-        <CSSTransition
-          in={this.state.show}
-          timeout={1000}
-        >
-          <p>todolist</p>
-        </CSSTransition>
+        <p>todolist</p>
         <label htmlFor='insertArea'>输入内容</label>
         <input 
           ref={(input) => {this.input = input}}
@@ -46,7 +42,9 @@ class App extends Component {
         />
         <button onClick={this.handleSubmit}>提交</button>
         <ul>
-          {this.getTodoItem()}
+          <TransitionGroup>
+            {this.getTodoItem()}
+          </TransitionGroup>
         </ul>
       </Fragment>
     );
@@ -56,12 +54,18 @@ class App extends Component {
     return (
       this.state.list.map((item, index) => {
         return (
-          <TodoItem 
-            key={index} 
-            content={item} 
-            index={index} 
-            handleItemDelete={this.handleItemDelete}
-          />
+          <CSSTransition
+          // key不能用index删除时动效会出问题，key应改不重复且稳定
+            key={item.uuid}
+            timeout={1000}
+            classNames={"item"}
+          >
+            <TodoItem 
+              content={item.value} 
+              index={index} 
+              handleItemDelete={this.handleItemDelete}
+            />
+          </CSSTransition>
         )
       })
     )
@@ -90,13 +94,12 @@ class App extends Component {
 
   handleSubmit() {
     this.setState((prevState) => ({
-      list: [...prevState.list, prevState.inputValue],
+      list: [...prevState.list, {uuid: uuid(), value:prevState.inputValue}],
       inputValue: ''
     }))
   }
 
   handleItemDelete(index) {
-    console.log(index)
     this.setState((prevState) => {
       const list = [...prevState.list]
       list.splice(index, 1)
