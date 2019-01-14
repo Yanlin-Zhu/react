@@ -1,10 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import TodoItem from './TodoItem'
 import axios from 'axios'
 import { CSSTransition } from 'react-transition-group';
 import { TransitionGroup } from 'react-transition-group';
 import uuid from 'uuid';
+import 'antd/dist/antd.css'
+import { Input, Button, List } from 'antd';
 
 class App extends Component {
 
@@ -31,48 +33,57 @@ class App extends Component {
   render() {
     // JSX
     return (
-      <Fragment>
-        <p>todolist</p>
-        <label htmlFor='insertArea'>输入内容</label>
-        <input 
+      <div style={{margin: 10}}>
+        <Input 
+          style={{width: 300, marginRight: 10}}
+          placeholder={'todo info'}
           ref={(input) => {this.input = input}}
           id='insertArea'
-          value={this.state.inputValue}
+          // value={this.state.inputValue}
           onChange={this.handleInputChange}
+          onPressEnter={this.handleInputChange}
         />
-        <button onClick={this.handleSubmit}>提交</button>
-        <ul>
-          <TransitionGroup>
-            {this.getTodoItem()}
-          </TransitionGroup>
-        </ul>
-      </Fragment>
+        <Button 
+          type={'primary'}
+          onClick={this.handleSubmit}
+        >
+          提交
+        </Button>
+        <List
+          bordered
+          style={{width: 300, marginTop: 10}}
+          dataSource={[]}
+          renderItem={item => (
+            <List.Item>{item.value}</List.Item>
+            // <TransitionGroup>
+            //   {this.getTodoItem(item)}
+            // </TransitionGroup>
+          )}
+        />
+      </div>
     );
   }
 
-  getTodoItem() {
+  getTodoItem(item) {
     return (
-      this.state.list.map((item, index) => {
-        return (
-          <CSSTransition
-          // key不能用index删除时动效会出问题，key应改不重复且稳定
-            key={item.uuid}
-            timeout={1000}
-            classNames={"item"}
-          >
-            <TodoItem 
-              content={item.value} 
-              index={index} 
-              handleItemDelete={this.handleItemDelete}
-            />
-          </CSSTransition>
-        )
-      })
+      <CSSTransition
+      // key不能用index删除时动效会出问题，key应改不重复且稳定
+        key={item.uuid}
+        timeout={1000}
+        classNames={"item"}
+      >
+        <TodoItem 
+          content={item.value} 
+          // index={index} 
+          handleItemDelete={this.handleItemDelete}
+        />
+      </CSSTransition>
     )
   }
 
   // handleInputChange(e) {
   handleInputChange() {
+    console.log('handleInputChange')
     // 同步setState
     // this.setState({
     //   inputValue: e.target.value
@@ -93,6 +104,7 @@ class App extends Component {
   }
 
   handleSubmit() {
+    console.log('handleSubmit')
     this.setState((prevState) => ({
       list: [...prevState.list, {uuid: uuid(), value:prevState.inputValue}],
       inputValue: ''
@@ -100,6 +112,7 @@ class App extends Component {
   }
 
   handleItemDelete(index) {
+    console.log('handleItemDelete')
     this.setState((prevState) => {
       const list = [...prevState.list]
       list.splice(index, 1)
