@@ -1,33 +1,29 @@
 import React, { Component } from 'react';
 import './App.css';
-// import TodoItem from './TodoItem'
-import axios from 'axios'
-// import { CSSTransition } from 'react-transition-group';
-// import { TransitionGroup } from 'react-transition-group';
-// import uuid from 'uuid';
+// import axios from 'axios'
 import 'antd/dist/antd.css'
 import { Input, Button, List } from 'antd';
+import store from './store'
 
 class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      inputValue: '',
-      list: []
-    }
+    this.state = store.getState()
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleItemDelete = this.handleItemDelete.bind(this)
+    // this.handleItemDelete = this.handleItemDelete.bind(this)
+    this.handelStoreChange = this.handelStoreChange.bind(this)
+    store.subscribe(this.handelStoreChange)
   }
 
   componentDidMount() {
     // ajax请求一般放在这里charles mock数据
-    axios.get('/todolist/get').then((res) => {
-      this.setState(() => ({list: [...res.data]}))
-    }).catch((error) => {
-      console.log(error)
-    })
+    // axios.get('/todolist/get').then((res) => {
+    //   this.setState(() => ({list: [...res.data]}))
+    // }).catch((error) => {
+    //   console.log(error)
+    // })
   }
 
   render() {
@@ -37,9 +33,8 @@ class App extends Component {
         <Input 
           style={{width: 300, marginRight: 10}}
           placeholder={'todo info'}
-          // ref={(input) => {this.input = input}}
           id='insertArea'
-          // value={this.state.inputValue}
+          value={this.state.inputValue}
           onChange={this.handleInputChange}
           onPressEnter={this.handleSubmit}
         />
@@ -62,42 +57,31 @@ class App extends Component {
   }
 
   handleInputChange(e) {
-    console.log('handleInputChange')
-    // 同步setState
-    // this.setState({
-    //   inputValue: e.target.value
-    // })
+    const action = {
+      type: 'change_input_value',
+      inputValue: e.target.value
+    }
+    store.dispatch(action)
+  }
 
-    // 新版回调异步setState有性能提升
-    // this.setState(() => {
-    //   return {
-    //     inputValue: e.target.value
-    //   }
-    // })
-
-    // es6简写
-    // 事件对象无法异步获取会被置为null
-    console.log(e)
-    const value = e.target.value
-    this.setState(() => ({inputValue: value}))
+  handelStoreChange() {
+    this.setState(store.getState())
   }
 
   handleSubmit() {
-    console.log('handleSubmit')
-    this.setState((prevState) => ({
-      list: [...prevState.list, prevState.inputValue],
-      inputValue: ''
-    }))
+    const action = {
+      type: 'add_todo_item'
+    }
+    store.dispatch(action)
   }
 
-  handleItemDelete(index) {
-    console.log('handleItemDelete')
-    this.setState((prevState) => {
-      const list = [...prevState.list]
-      list.splice(index, 1)
-      return {list}
-    })
-  }
+  // handleItemDelete(index) {
+  //   this.setState((prevState) => {
+  //     const list = [...prevState.list]
+  //     list.splice(index, 1)
+  //     return {list}
+  //   })
+  // }
 }
 
 export default App;
