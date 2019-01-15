@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import TodoItem from './TodoItem'
+// import TodoItem from './TodoItem'
 import axios from 'axios'
-import { CSSTransition } from 'react-transition-group';
-import { TransitionGroup } from 'react-transition-group';
-import uuid from 'uuid';
+// import { CSSTransition } from 'react-transition-group';
+// import { TransitionGroup } from 'react-transition-group';
+// import uuid from 'uuid';
 import 'antd/dist/antd.css'
 import { Input, Button, List } from 'antd';
 
@@ -37,11 +37,11 @@ class App extends Component {
         <Input 
           style={{width: 300, marginRight: 10}}
           placeholder={'todo info'}
-          ref={(input) => {this.input = input}}
+          // ref={(input) => {this.input = input}}
           id='insertArea'
           // value={this.state.inputValue}
           onChange={this.handleInputChange}
-          onPressEnter={this.handleInputChange}
+          onPressEnter={this.handleSubmit}
         />
         <Button 
           type={'primary'}
@@ -52,37 +52,16 @@ class App extends Component {
         <List
           bordered
           style={{width: 300, marginTop: 10}}
-          dataSource={[]}
+          dataSource={this.state.list}
           renderItem={item => (
-            <List.Item>{item.value}</List.Item>
-            // <TransitionGroup>
-            //   {this.getTodoItem(item)}
-            // </TransitionGroup>
+            <List.Item>{item}</List.Item>
           )}
         />
       </div>
     );
   }
 
-  getTodoItem(item) {
-    return (
-      <CSSTransition
-      // key不能用index删除时动效会出问题，key应改不重复且稳定
-        key={item.uuid}
-        timeout={1000}
-        classNames={"item"}
-      >
-        <TodoItem 
-          content={item.value} 
-          // index={index} 
-          handleItemDelete={this.handleItemDelete}
-        />
-      </CSSTransition>
-    )
-  }
-
-  // handleInputChange(e) {
-  handleInputChange() {
+  handleInputChange(e) {
     console.log('handleInputChange')
     // 同步setState
     // this.setState({
@@ -98,15 +77,15 @@ class App extends Component {
 
     // es6简写
     // 事件对象无法异步获取会被置为null
-    // const value = e.target.value
-    const value = this.input.value
+    console.log(e)
+    const value = e.target.value
     this.setState(() => ({inputValue: value}))
   }
 
   handleSubmit() {
     console.log('handleSubmit')
     this.setState((prevState) => ({
-      list: [...prevState.list, {uuid: uuid(), value:prevState.inputValue}],
+      list: [...prevState.list, prevState.inputValue],
       inputValue: ''
     }))
   }
