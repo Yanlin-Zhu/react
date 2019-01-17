@@ -4,7 +4,7 @@ import './App.css';
 import 'antd/dist/antd.css'
 import { Input, Button, List } from 'antd';
 import store from './store'
-import { CHANGE_INPUT_VALUE, ADD_TODO_ITEM, DELETE_TODO_ITEM } from './store/actionTypes'
+import { getInputChangeACtion, getAddTodoItemAction, getDeleteTodoItemAction } from './store/actionCreators'
 
 class App extends Component {
 
@@ -57,10 +57,7 @@ class App extends Component {
   }
 
   handleInputChange(e) {
-    const action = {
-      type: CHANGE_INPUT_VALUE,
-      inputValue: e.target.value
-    }
+    const action = getInputChangeACtion(e.target.value)
     store.dispatch(action)
   }
 
@@ -69,17 +66,12 @@ class App extends Component {
   }
 
   handleSubmit() {
-    const action = {
-      type: ADD_TODO_ITEM
-    }
+    const action = getAddTodoItemAction()
     store.dispatch(action)
   }
 
   handleItemDelete(index) {
-    const action = {
-      type: DELETE_TODO_ITEM,
-      index
-    }
+    const action = getDeleteTodoItemAction(index)
     store.dispatch(action)
   }
 }
