@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import axios from 'axios'
 import 'antd/dist/antd.css'
 import store from './store'
-import { getInputChangeACtion, getAddTodoItemAction, getDeleteTodoItemAction } from './store/actionCreators'
+import { getInputChangeACtion, getAddTodoItemAction, getDeleteTodoItemAction, getTodoList } from './store/actionCreators'
 import TodoListUI from './TodoListUI'
 
 class App extends Component {
@@ -25,6 +25,8 @@ class App extends Component {
     // }).catch((error) => {
     //   console.log(error)
     // })
+    const action = getTodoList()
+    store.dispatch(action)
   }
 
   render() {
