@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // import axios from 'axios'
 import 'antd/dist/antd.css'
 import store from './store'
-import { getInputChangeACtion, getAddTodoItemAction, getDeleteTodoItemAction, getTodoList } from './store/actionCreators'
+import { getInputChangeACtion, getAddTodoItemAction, getDeleteTodoItemAction, getInitList } from './store/actionCreators'
 import TodoListUI from './TodoListUI'
 
 class App extends Component {
@@ -21,12 +21,12 @@ class App extends Component {
   componentDidMount() {
     // ajax请求一般放在这里charles mock数据
     // axios.get('/todolist/get').then((res) => {
-    //   this.setState(() => ({list: [...res.data]}))
+      const list = ['a']
+      const action = getInitList(list)
+      store.dispatch(action)
     // }).catch((error) => {
     //   console.log(error)
     // })
-    const action = getTodoList()
-    store.dispatch(action)
   }
 
   render() {
