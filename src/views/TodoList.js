@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 // import './TodoList.css';
 // import axios from 'axios'
 import 'antd/dist/antd.css'
-import store from './store'
-import { getInputChangeACtion, getAddTodoItemAction, getDeleteTodoItemAction, getInitList } from './store/actionCreators'
+import store from '../store'
+import { getInputChangeACtion, getAddTodoItemAction, getDeleteTodoItemAction, getInitList } from '../store/actionCreators'
 import TodoListUI from './TodoListUI'
 
-class App extends Component {
+class TodoList extends Component {
 
   constructor(props) {
     super(props);
@@ -62,4 +62,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default TodoList;
